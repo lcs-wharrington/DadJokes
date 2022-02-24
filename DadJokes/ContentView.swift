@@ -15,6 +15,9 @@ struct ContentView: View {
     //hold a list of favouite jokes
     @State var favourites: [DadJoke] = []
     
+    //
+    @State var currentJokeAddedToFavourites: Bool = false
+    
     
     // MARK: Computed properties
     var body: some View {
@@ -32,9 +35,18 @@ struct ContentView: View {
             
             Image(systemName: "heart.circle")
                 .font(.largeTitle)
+                .foregroundColor(currentJokeAddedToFavourites == true ? .red : .secondary)
                 .onTapGesture {
+                    
+                    if currentJokeAddedToFavourites == false {
+                    
                     // add the current joke to list
                     favourites.append(currentJoke)
+                    
+                    //Keep track of joke becouming a favourite
+                    currentJokeAddedToFavourites = true
+                        
+                    }
                 }
             
             Button(action: {
@@ -105,6 +117,9 @@ struct ContentView: View {
             //                                         |
             //                                         V
             currentJoke = try JSONDecoder().decode(DadJoke.self, from: data)
+            
+            //we need to check if the current joke is already a favourite
+            currentJokeAddedToFavourites = false
             
         } catch {
             print("Could not retrieve or decode the JSON from endpoint.")
