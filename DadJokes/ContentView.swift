@@ -55,9 +55,9 @@ struct ContentView: View {
                 Spacer()
             }
             
-            List(favourites) { currentJoke in
+            List(favourites, id: \.self) { currentJoke in
                 
-                Text (currentJoke.joke)
+                Text(currentJoke.joke)
                 
             }
             
