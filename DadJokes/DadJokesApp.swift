@@ -2,7 +2,7 @@
 //  DadJokesApp.swift
 //  DadJokes
 //
-//  Created by William Robert Harrington on 2022-02-22.
+//  Created by Russell Gordon on 2022-02-22.
 //
 
 import SwiftUI
@@ -11,9 +11,7 @@ import SwiftUI
 struct DadJokesApp: App {
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                ContentView()
-            }
+            ContentView()
         }
     }
 }
