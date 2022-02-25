@@ -11,11 +11,16 @@ struct ContentView: View {
     
     // MARK: Stored properties
     @State var currentJoke: DadJoke = DadJoke(id: "",
-                                       joke: "Knock, knock...",
-                                       status: 0)
+                                              joke: "Knock, knock...",
+                                              status: 0)
     
     // This will keep track of our list of favourite jokes
     @State var favourites: [DadJoke] = []   // empty list to start
+    
+    // Detect when app moves between the foreground, background, and inactive states
+    // NOTE: A complete list of keypaths that can be used with @Environment can be found here:
+    // https://developer.apple.com/documentation/swiftui/environmentvalues
+    @Environment(\.scenePhase) var scenePhase
     
     // This will let us know whether the current exists as a favourite
     @State var currentJokeAddedToFavourites: Bool = false
@@ -37,7 +42,7 @@ struct ContentView: View {
             
             Image(systemName: "heart.circle")
                 .font(.largeTitle)
-                //                      CONDITION                        true   false
+            //                      CONDITION                        true   false
                 .foregroundColor(currentJokeAddedToFavourites == true ? .red : .secondary)
                 .onTapGesture {
                     
@@ -49,9 +54,7 @@ struct ContentView: View {
                         
                         // Record that we have marked this as a favourite
                         currentJokeAddedToFavourites = true
-
                     }
-                    
                 }
             
             Button(action: {
@@ -85,8 +88,30 @@ struct ContentView: View {
             }
             
             Spacer()
-                        
+            
         }
+        
+        // React to changes of state for the app (foreground, background, and inactive)
+        .onChange(of: scenePhase) { newPhase in
+            
+            if newPhase == .inactive {
+                
+                print("Inactive")
+                
+            } else if newPhase == .active {
+                
+                print("Active")
+                
+            } else if newPhase == .background {
+                
+                print("Background")
+                
+                // Permanently save the list of tasks
+                persistFavourites()
+            }
+        }
+        
+        
         // When the app opens, get a new joke from the web service
         .task {
             
@@ -153,9 +178,9 @@ struct ContentView: View {
             // populates
             print(error)
         }
-
+        
     }
- 
+    
     
     
     // Saves (persists) the data to local storage on the device
